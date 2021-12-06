@@ -4,5 +4,5 @@
     "cluster_config": "",
     "advanced_argument_conversion": ["no", "yes"],
     "cluster_name": "",
-    "default_logdir": "logs"
+    "default_cluster_logdir": "logs"
 }
