@@ -50,7 +50,7 @@ if ADVANCED_ARGUMENT_CONVERSION:
     sbatch_options = slurm_utils.advanced_argument_conversion(sbatch_options)
 
 # 7) set output and error logs
-log_dir = job_properties.get("logdir", "{{cookiecutter.default_cluster_logdir}}")
+log_dir = job_properties.get("logdir", "logs")
 # get the name of the job
 wildcards = job.get("wildcards", dict())
 wildcards_str = ";".join("{}={}".format(k, v) for k, v in wildcards.items())

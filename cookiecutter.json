@@ -3,6 +3,5 @@
     "sbatch_defaults": "",
     "cluster_config": "",
     "advanced_argument_conversion": ["no", "yes"],
-    "cluster_name": "",
-    "default_cluster_logdir": "logs"
+    "cluster_name": ""
 }
