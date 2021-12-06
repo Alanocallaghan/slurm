@@ -49,7 +49,26 @@ sbatch_options.update(job_properties.get("cluster", {}))
 if ADVANCED_ARGUMENT_CONVERSION:
     sbatch_options = slurm_utils.advanced_argument_conversion(sbatch_options)
 
-# 7) Format pattern in snakemake style
+# 7) set output and error logs
+log_dir = job_properties.get("logdir", "{{cookiecutter.default_cluster_logdir}}")
+# get the name of the job
+wildcards = job.get("wildcards", dict())
+wildcards_str = ";".join("{}={}".format(k, v) for k, v in wildcards.items())
+if not wildcards_str:
+    # if there aren't wildcards, this is a unique rule
+    wildcards_str = "unique"
+jobname = job_properties.get("jobname", "{0}.{1}".format(rule, wildcards_str))
+# get the output file name
+out_log = job_properties.get("output", "{}.out".format(jobname))
+err_log = job_properties.get("error", "{}.err".format(jobname))
+# get logfile paths
+out_log_path = str(Path(log_dir).joinpath(out_log))
+err_log_path = str(Path(log_dir).joinpath(err_log))
+# add to options
+sbatch_options.update("output", out_log_path)
+sbatch_options.update("error", err_log_path)
+
+# 8) Format pattern in snakemake style
 sbatch_options = slurm_utils.format_values(sbatch_options, job_properties)
 
 # ensure sbatch output dirs exist
