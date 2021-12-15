@@ -51,22 +51,26 @@ if ADVANCED_ARGUMENT_CONVERSION:
 
 # 7) set output and error logs
 log_dir = job_properties.get("logdir", "logs")
+rule = job_properties.get("rule", "jobname")
 # get the name of the job
-wildcards = job.get("wildcards", dict())
+wildcards = job_properties.get("wildcards", dict())
 wildcards_str = ";".join("{}={}".format(k, v) for k, v in wildcards.items())
 if not wildcards_str:
     # if there aren't wildcards, this is a unique rule
     wildcards_str = "unique"
 jobname = job_properties.get("jobname", "{0}.{1}".format(rule, wildcards_str))
 # get the output file name
-out_log = job_properties.get("output", "{}.out".format(jobname))
-err_log = job_properties.get("error", "{}.err".format(jobname))
+out_log = "{}.out".format(jobname)
+err_log = "{}.err".format(jobname)
 # get logfile paths
 out_log_path = str(Path(log_dir).joinpath(out_log))
 err_log_path = str(Path(log_dir).joinpath(err_log))
 # add to options
-sbatch_options.update("output", out_log_path)
-sbatch_options.update("error", err_log_path)
+sbatch_options["output"] = out_log_path
+sbatch_options["error"] = err_log_path
+# I guess this would be a better way to do it but the syntax is wrong
+# sbatch_options.update("output", out_log_path)
+# sbatch_options.update("error", err_log_path)
 
 # 8) Format pattern in snakemake style
 sbatch_options = slurm_utils.format_values(sbatch_options, job_properties)
